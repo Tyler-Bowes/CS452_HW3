@@ -53,6 +53,13 @@ BIDEFN(cd) {
     ERROR("chdir() failed"); // warn
 }
 
+// comment every line so it is well documented
+BIDEFN(sleep) { 
+  builtin_args(r,1);  // check for correct number of arguments
+  sleep(atoi(r->argv[1])); // sleep for the number of seconds given
+  // checking if r->argv[1] is a number is not necessary because atoi will return 0 if it is not a number
+}
+
 static int builtin(BIARGS) {
   typedef struct {
     char *s;
@@ -62,6 +69,7 @@ static int builtin(BIARGS) {
     BIENTRY(exit),
     BIENTRY(pwd),
     BIENTRY(cd),
+    BIENTRY(sleep),
     {0,0}
   };
   int i;

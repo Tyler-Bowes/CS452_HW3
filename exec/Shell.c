@@ -1,3 +1,10 @@
+/**
+ * The shell program allows users to interact with the operating system by executing commands.
+ * It provides a command prompt where users can enter commands, and then executes those commands
+ * by creating child processes. The shell program also supports basic command line features such
+ * as input/output redirection and piping.
+ */
+#include <stdio.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -16,6 +23,8 @@ int main() {
   Jobs jobs=newJobs();
   char *prompt=0;
 
+// checks whether the standard input (stdin) is associated with a terminal using the isatty() function. 
+// The isatty() function returns a non-zero value if the file descriptor refers to a terminal, and 0 otherwise
   if (isatty(fileno(stdin))) {
     using_history();
     read_history(".history");
@@ -25,9 +34,9 @@ int main() {
     rl_outstream=fopen("/dev/null","w");
   }
   
-  while (!eof) {
+  while (!eof) { // enters loop to read commands from the user and execute them
     char *line=readline(prompt);
-    if (!line)
+    if (!line) // is it null (error?)
       break;
     if (*line)
       add_history(line);
