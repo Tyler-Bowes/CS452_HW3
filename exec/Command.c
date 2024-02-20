@@ -53,45 +53,44 @@ BIDEFN(cd) {
     ERROR("chdir() failed"); // warn
 }
 
-// comment every line so it is well documented
-BIDEFN(sleep) { 
-  builtin_args(r,1);  // check for correct number of arguments
-  sleep(atoi(r->argv[1])); // sleep for the number of seconds given
-}
+// BIDEFN(sleep) { 
+//   builtin_args(r,1);  // check for correct number of arguments
+//   sleep(atoi(r->argv[1])); // sleep for the number of seconds given
+// }
 
-// implement cat as a builtin
-BIDEFN(cat) {
-  builtin_args(r,1);
-  FILE *file = fopen(r->argv[1], "r"); // open the file
-  if (file == NULL) {
-    ERROR("file does not exist");
-  }
-  char c;
-  while ((c = fgetc(file)) != EOF) { // read the file character by character and print it to stdout
-    printf("%c", c);
-  }
-  fclose(file);
-}
+// // implement cat as a builtin
+// BIDEFN(cat) {
+//   builtin_args(r,1);
+//   FILE *file = fopen(r->argv[1], "r"); // open the file
+//   if (file == NULL) {
+//     ERROR("file does not exist");
+//   }
+//   char c;
+//   while ((c = fgetc(file)) != EOF) { // read the file character by character and print it to stdout
+//     printf("%c", c);
+//   }
+//   fclose(file);
+// }
 
-// implement cp as a builtin
-BIDEFN(cp) {
-  builtin_args(r,2);
-  FILE *target_file = fopen(r->argv[1], "r"); // open the target file
-  if (target_file == NULL) {
-    ERROR("Target file does not exist");
-  }
-  FILE *copy_file = fopen(r->argv[2], "w"); // open the destination file
-  if (copy_file == NULL) {
-    ERROR("destination file does not exist");
-  }
-  char c;
-  // read the target file character by character and write it to the destination file
-  while ((c = fgetc(target_file)) != EOF) { 
-    fputc(c, copy_file);
-  }
-  fclose(target_file);
-  fclose(copy_file);
-}
+// // implement cp as a builtin
+// BIDEFN(cp) {
+//   builtin_args(r,2);
+//   FILE *target_file = fopen(r->argv[1], "r"); // open the target file
+//   if (target_file == NULL) {
+//     ERROR("Target file does not exist");
+//   }
+//   FILE *copy_file = fopen(r->argv[2], "w"); // open the destination file
+//   if (copy_file == NULL) {
+//     ERROR("destination file does not exist");
+//   }
+//   char c;
+//   // read the target file character by character and write it to the destination file
+//   while ((c = fgetc(target_file)) != EOF) { 
+//     fputc(c, copy_file);
+//   }
+//   fclose(target_file);
+//   fclose(copy_file);
+// }
 
 static int builtin(BIARGS) {
   typedef struct {
@@ -102,9 +101,9 @@ static int builtin(BIARGS) {
     BIENTRY(exit),
     BIENTRY(pwd),
     BIENTRY(cd),
-    BIENTRY(sleep),
-    BIENTRY(cat),
-    BIENTRY(cp),
+    // BIENTRY(sleep),
+    // BIENTRY(cat),
+    // BIENTRY(cp),
     {0,0}
   };
   int i;
