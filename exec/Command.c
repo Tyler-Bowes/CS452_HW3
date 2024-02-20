@@ -53,6 +53,13 @@ BIDEFN(cd) {
     ERROR("chdir() failed"); // warn
 }
 
+//implement history as a builtin
+BIDEFN(history) {
+  builtin_args(r,0);
+  printf("history\n");
+}
+
+
 // BIDEFN(sleep) { 
 //   builtin_args(r,1);  // check for correct number of arguments
 //   sleep(atoi(r->argv[1])); // sleep for the number of seconds given
@@ -101,6 +108,7 @@ static int builtin(BIARGS) {
     BIENTRY(exit),
     BIENTRY(pwd),
     BIENTRY(cd),
+    BIENTRY(history),
     // BIENTRY(sleep),
     // BIENTRY(cat),
     // BIENTRY(cp),
