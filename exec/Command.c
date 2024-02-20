@@ -57,7 +57,20 @@ BIDEFN(cd) {
 BIDEFN(sleep) { 
   builtin_args(r,1);  // check for correct number of arguments
   sleep(atoi(r->argv[1])); // sleep for the number of seconds given
-  // checking if r->argv[1] is a number is not necessary because atoi will return 0 if it is not a number
+}
+
+// implement cat as a builtin
+BIDEFN(cat) {
+  builtin_args(r,1);
+  FILE *file = fopen(r->argv[1], "r"); // open the file
+  if (file == NULL) {
+    ERROR("file does not exist");
+  }
+  char c;
+  while ((c = fgetc(file)) != EOF) { // read the file character by character and print it to stdout
+    printf("%c", c);
+  }
+  fclose(file);
 }
 
 static int builtin(BIARGS) {
@@ -70,6 +83,7 @@ static int builtin(BIARGS) {
     BIENTRY(pwd),
     BIENTRY(cd),
     BIENTRY(sleep),
+    BIENTRY(cat),
     {0,0}
   };
   int i;
