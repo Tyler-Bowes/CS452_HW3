@@ -75,6 +75,8 @@ static T_sequence p_sequence() {
   if (eat("&")) {
     sequence->op="&";
     sequence->sequence=p_sequence();
+    // wait a second so the output is sent first
+    sleep(1);
   }
   if (eat(";")) {
     sequence->op=";";
