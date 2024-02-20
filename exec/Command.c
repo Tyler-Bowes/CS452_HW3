@@ -56,7 +56,16 @@ BIDEFN(cd) {
 //implement history as a builtin
 BIDEFN(history) {
   builtin_args(r,0);
-  printf("history\n");
+  //prints everything inside the .history file to standard output
+  FILE *file = fopen(".history", "r");
+  if (file == NULL) {
+    ERROR("file does not exist");
+  }
+  char c;
+  while ((c = fgetc(file)) != EOF) {
+    printf("%c", c);
+  }
+  fclose(file);
 }
 
 
