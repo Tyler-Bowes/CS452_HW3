@@ -176,6 +176,7 @@ extern void execCommand(Command command, Pipeline pipeline, Jobs jobs,
     ERROR("fork() failed");
   if (pid==0)
     child(r,fg);
+  sleep(1);
 }
 
 extern void freeCommand(Command command) {
