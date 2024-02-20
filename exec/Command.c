@@ -73,6 +73,26 @@ BIDEFN(cat) {
   fclose(file);
 }
 
+// implement cp as a builtin
+BIDEFN(cp) {
+  builtin_args(r,2);
+  FILE *target_file = fopen(r->argv[1], "r"); // open the target file
+  if (target_file == NULL) {
+    ERROR("Target file does not exist");
+  }
+  FILE *copy_file = fopen(r->argv[2], "w"); // open the destination file
+  if (copy_file == NULL) {
+    ERROR("destination file does not exist");
+  }
+  char c;
+  // read the target file character by character and write it to the destination file
+  while ((c = fgetc(target_file)) != EOF) { 
+    fputc(c, copy_file);
+  }
+  fclose(target_file);
+  fclose(copy_file);
+}
+
 static int builtin(BIARGS) {
   typedef struct {
     char *s;
@@ -84,6 +104,7 @@ static int builtin(BIARGS) {
     BIENTRY(cd),
     BIENTRY(sleep),
     BIENTRY(cat),
+    BIENTRY(cp),
     {0,0}
   };
   int i;
