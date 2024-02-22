@@ -49,12 +49,8 @@ BIDEFN(cd) {
   } else {
     if (owd) free(owd);
     owd=strdup(cwd);
-    char *new_cwd = malloc(strlen(cwd) + strlen(r->argv[1]) + 2); // +2 for the slash and null terminator
-    sprintf(new_cwd, "%s/%s", cwd, r->argv[1]);
-    cwd=new_cwd;
-
     // owd=cwd;
-    // cwd=strdup(r->argv[1]);
+    cwd=strdup(r->argv[1]);
   }
   if (cwd && chdir(cwd))
     ERROR("chdir() failed"); // warn
