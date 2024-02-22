@@ -47,13 +47,22 @@ BIDEFN(cd) {
     cwd=owd;
     owd=twd;
   } else {
-    if (owd) free(owd);
-    owd=strdup(cwd);
-    // owd=cwd;
-    cwd=strdup(r->argv[1]);
+  if (owd) free(owd);
+    owd=cwd;
+    if (chdir(r->argv[1])) {
+      ERROR("chdir() failed"); // warn
+      return;
+    }
+    cwd = getcwd(NULL, 0); // get the current working directory
   }
-  if (cwd && chdir(cwd))
-    ERROR("chdir() failed"); // warn
+  
+  //og code
+  //   if (owd) free(owd);
+  //   owd=cwd;
+  //   cwd=strdup(r->argv[1]);
+  // }
+  // if (cwd && chdir(cwd))
+  //   ERROR("chdir() failed"); // warn
 }
 
 //implement history as a builtin
