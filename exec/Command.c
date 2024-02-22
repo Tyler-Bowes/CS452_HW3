@@ -9,6 +9,8 @@
 typedef struct {
   char *file;
   char **argv;
+  char* input_file;  // The file to redirect stdin from, or NULL if there is no input redirection
+  char* output_file; // The file to redirect stdout to, or NULL if there is no output redirection
 } *CommandRep;
 
 #define BIARGS CommandRep r, int *eof, Jobs jobs
@@ -141,19 +143,20 @@ extern void execCommand(Command command, Pipeline pipeline, Jobs jobs,
   if (pid==-1)
     ERROR("fork() failed");
   if (pid==0) {
-      // if (r->input_file) {
-      //   // Redirect stdin to the specified file
-      //   freopen(r->input_file, "r", stdin);
-      // }
-      // if (r->output_file) {
-      //   // Redirect stdout to the specified file
-      //   freopen(r->output_file, "w", stdout);
-      // }
+      if (r->input_file) {
+        // Redirect stdin to the specified file
+        freopen(r->input_file, "r", stdin);
+      }
+      if (r->output_file) {
+        // Redirect stdout to the specified file
+        freopen(r->output_file, "w", stdout);
+      }
     child(r,fg);
-  } else if (fg) {// if the command should be run in the foreground
-    waitpid(pid, NULL, 0); // wait for the command to finish
-  }
-  // sleep(1);
+  } 
+  // else if (fg) {// if the command should be run in the foreground
+  //   waitpid(pid, NULL, 0); // wait for the command to finish
+  // }
+  sleep(1);
 }
 
 extern void freeCommand(Command command) {
