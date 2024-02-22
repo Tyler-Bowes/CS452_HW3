@@ -68,46 +68,6 @@ BIDEFN(history) {
   fclose(file);
 }
 
-
-// BIDEFN(sleep) { 
-//   builtin_args(r,1);  // check for correct number of arguments
-//   sleep(atoi(r->argv[1])); // sleep for the number of seconds given
-// }
-
-// // implement cat as a builtin
-// BIDEFN(cat) {
-//   builtin_args(r,1);
-//   FILE *file = fopen(r->argv[1], "r"); // open the file
-//   if (file == NULL) {
-//     ERROR("file does not exist");
-//   }
-//   char c;
-//   while ((c = fgetc(file)) != EOF) { // read the file character by character and print it to stdout
-//     printf("%c", c);
-//   }
-//   fclose(file);
-// }
-
-// // implement cp as a builtin
-// BIDEFN(cp) {
-//   builtin_args(r,2);
-//   FILE *target_file = fopen(r->argv[1], "r"); // open the target file
-//   if (target_file == NULL) {
-//     ERROR("Target file does not exist");
-//   }
-//   FILE *copy_file = fopen(r->argv[2], "w"); // open the destination file
-//   if (copy_file == NULL) {
-//     ERROR("destination file does not exist");
-//   }
-//   char c;
-//   // read the target file character by character and write it to the destination file
-//   while ((c = fgetc(target_file)) != EOF) { 
-//     fputc(c, copy_file);
-//   }
-//   fclose(target_file);
-//   fclose(copy_file);
-// }
-
 static int builtin(BIARGS) {
   typedef struct {
     char *s;
@@ -118,9 +78,6 @@ static int builtin(BIARGS) {
     BIENTRY(pwd),
     BIENTRY(cd),
     BIENTRY(history),
-    // BIENTRY(sleep),
-    // BIENTRY(cat),
-    // BIENTRY(cp),
     {0,0}
   };
   int i;
@@ -183,9 +140,20 @@ extern void execCommand(Command command, Pipeline pipeline, Jobs jobs,
   int pid=fork();
   if (pid==-1)
     ERROR("fork() failed");
-  if (pid==0)
+  if (pid==0) {
+      // if (r->input_file) {
+      //   // Redirect stdin to the specified file
+      //   freopen(r->input_file, "r", stdin);
+      // }
+      // if (r->output_file) {
+      //   // Redirect stdout to the specified file
+      //   freopen(r->output_file, "w", stdout);
+      // }
     child(r,fg);
-  sleep(1);
+  } else if (fg) {// if the command should be run in the foreground
+    waitpid(pid, NULL, 0); // wait for the command to finish
+  }
+  // sleep(1);
 }
 
 extern void freeCommand(Command command) {
