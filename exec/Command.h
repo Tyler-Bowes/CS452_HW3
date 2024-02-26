@@ -7,10 +7,10 @@ typedef void *Command;
 #include "Jobs.h"
 #include "Sequence.h"
 
-extern Command newCommand(T_words words);
+extern Command newCommand(T_words words, T_redirIO redir);
 
 extern void execCommand(Command command, Pipeline pipeline, Jobs jobs,
-			int *jobbed, int *eof, int fg);
+			int *jobbed, int *eof, int fg);  // will exec child process with exec name stored in command struct
 
 extern void freeCommand(Command command);
 extern void freestateCommand();

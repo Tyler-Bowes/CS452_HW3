@@ -22,6 +22,7 @@ static T_words p_words();
 static T_command p_command();
 static T_pipeline p_pipeline();
 static T_sequence p_sequence();
+static T_redirIO p_redir();
 
 static T_word p_word() {
   char *s=curr();
@@ -45,12 +46,13 @@ static T_words p_words() {
   return words;
 }
 
-static T_command p_command() {
+static T_command p_command() { // where Redir is called
   T_words words=0;
   words=p_words();
   if (!words)
     return 0;
   T_command command=new_command();
+  command->redir=p_redir();
   command->words=words;
   return command;
 }
@@ -80,19 +82,32 @@ static T_sequence p_sequence() {
     sequence->op=";";
     sequence->sequence=p_sequence();
   }
-  // added "<" and ">" for I/O
-  if (eat("<")) {
-    sequence->op="<";
-    sequence->input_file=p_word(); // parse the filename
-    sequence->sequence=p_sequence();
-  }
-  if (eat(">")) {
-    sequence->op=">";
-    sequence->output_file=p_word(); // parse the filename
-    sequence->sequence=p_sequence();
-  }
+  
   return sequence;
 }
+
+static T_redirIO p_redir() {
+  T_redirIO redir =new_redir();
+  // added "<" and ">" for I/O
+  if (eat("<")) {
+    redir->input_file=p_word(); // parse the filename
+  }else
+  {
+    redir->input_file=NULL;
+  }
+  
+  if (eat(">")) {
+    redir->output_file=p_word(); // parse the filename
+  }else
+  {
+    redir->output_file=NULL;
+  }
+
+  return redir;
+}
+
+
+
 
 extern Tree parseTree(char *s) {
   scan=newScanner(s);

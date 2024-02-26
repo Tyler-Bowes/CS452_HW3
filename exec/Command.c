@@ -5,6 +5,7 @@
 
 #include "Command.h"
 #include "error.h"
+#include "Tree.h"
 
 typedef struct {
   char *file;
@@ -121,10 +122,24 @@ static char **getargs(T_words words) {
   return argv;
 }
 
-extern Command newCommand(T_words words) {
+extern Command newCommand(T_words words, T_redirIO redir) {
   CommandRep r=(CommandRep)malloc(sizeof(*r));
   if (!r)
     ERROR("malloc() failed");
+  
+  if(redir->input_file == NULL){
+    r->input_file= NULL;
+  }else{
+    r->input_file = strdup(redir->input_file->s);
+    // r->input_file = redir->input_file->s;
+  }
+
+  if(redir->output_file == NULL){
+    r->output_file= NULL;
+  }else{
+  r->output_file = strdup(redir->output_file->s);
+  // r->output_file = redir->output_file->s;
+  }
   r->argv=getargs(words);
   r->file=r->argv[0];
   return r;
