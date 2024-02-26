@@ -39,7 +39,7 @@ static T_words p_words() {
     return 0;
   T_words words=new_words();
   words->word=word;
-  if (cmp("|") || cmp("&") || cmp(";"))
+  if (cmp("|") || cmp("&") || cmp(";") || cmp("<") || cmp(">"))  // added "<" and ">" for I/O
     return words;
   words->words=p_words();
   return words;
@@ -75,11 +75,20 @@ static T_sequence p_sequence() {
   if (eat("&")) {
     sequence->op="&";
     sequence->sequence=p_sequence();
-    // wait a second so the output is sent first
-    // sleep(1);
   }
   if (eat(";")) {
     sequence->op=";";
+    sequence->sequence=p_sequence();
+  }
+  // added "<" and ">" for I/O
+  if (eat("<")) {
+    sequence->op="<";
+    sequence->input_file=p_word(); // parse the filename
+    sequence->sequence=p_sequence();
+  }
+  if (eat(">")) {
+    sequence->op=">";
+    sequence->output_file=p_word(); // parse the filename
     sequence->sequence=p_sequence();
   }
   return sequence;
