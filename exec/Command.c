@@ -178,10 +178,10 @@ extern void execCommand(Command command, Pipeline pipeline, Jobs jobs,
       }
     child(r,fg);
   } 
-  else if (fg) {// if the command should be run in the foreground
-    waitpid(pid, NULL, 0); // wait for the command to finish
-  }
-  // sleep(1);
+  // else if (fg) {// if the command should be run in the foreground
+    // waitpid(pid, NULL, 0); // wait for the command to finish
+  // }
+  sleep(1);
 }
 
 extern void freeCommand(Command command) {
