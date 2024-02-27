@@ -1,1 +1,1 @@
-cat Test/Test_pwd/inp > Test/Test_IO_cat/out
+cat Test/Test_pwd/inp > Test/Test_O_cat/out
