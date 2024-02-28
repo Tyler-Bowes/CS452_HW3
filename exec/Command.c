@@ -157,14 +157,14 @@ extern void execCommand(Command command, Pipeline pipeline, Jobs jobs,
     *jobbed=1;
     addJobs(jobs,pipeline);
   }
-  int pipefd[2]; // file descriptors for the pipe
-  pipe(pipefd); // create a pipe
+  // int pipefd[2]; // file descriptors for the pipe
+  // pipe(pipefd); // create a pipe
   int pid=fork();
   if (pid==-1)
     ERROR("fork() failed");
   if (pid==0) {
-      close(pipefd[0]); // close the read end of the pipe in the child
-      dup2(pipefd[1], STDOUT_FILENO); // redirect stdout to the write end of the pipe
+      // close(pipefd[0]); // close the read end of the pipe in the child
+      // dup2(pipefd[1], STDOUT_FILENO); // redirect stdout to the write end of the pipe
       if (r->input_file) {
         // Redirect stdin to the specified file
         freopen(r->input_file, "r", stdin);
