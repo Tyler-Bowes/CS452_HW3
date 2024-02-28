@@ -174,17 +174,18 @@ extern void execCommand(Command command, Pipeline pipeline, Jobs jobs,
         freopen(r->output_file, "w", stdout);
       }
     child(r,fg);
-  } else {
-    close(pipefd[1]); // close the write end of the pipe in the parent
-    dup2(pipefd[0], STDIN_FILENO); // redirect stdin to the read end of the pipe
-    close(pipefd[0]); // close the read end of the pipe in the parent
-    if (fg) {
-      waitpid(pid, NULL, 0); // wait for the command to finish
-    }
-  }
-  // else if (fg) {// if the command should be run in the foreground
-  //   waitpid(pid, NULL, 0); // wait for the command to finish
+  } 
+  // else {
+  //   close(pipefd[1]); // close the write end of the pipe in the parent
+  //   dup2(pipefd[0], STDIN_FILENO); // redirect stdin to the read end of the pipe
+  //   close(pipefd[0]); // close the read end of the pipe in the parent
+  //   if (fg) {
+  //     waitpid(pid, NULL, 0); // wait for the command to finish
+  //   }
   // }
+  else if (fg) {// if the command should be run in the foreground
+    waitpid(pid, NULL, 0); // wait for the command to finish
+  }
 }
 
 extern void freeCommand(Command command) {
