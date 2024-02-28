@@ -34,8 +34,12 @@ extern int sizePipeline(Pipeline pipeline) {
 
 static void execute(Pipeline pipeline, Jobs jobs, int *jobbed, int *eof) {
   PipelineRep r=(PipelineRep)pipeline;
-  for (int i=0; i<sizePipeline(r) && !*eof; i++)
-    execCommand(deq_head_ith(r->processes,i),pipeline,jobs,jobbed,eof,1);  // fg only for now (no bg) seen by 1
+  for (int i=0; i<sizePipeline(r) && !*eof; i++){
+    // pipe(r->processes->head->data->fd);
+    execCommand(deq_head_ith(r->processes,i),pipeline,jobs,jobbed,eof, 1);  // fg only for now (no bg) seen by 1
+    // close(r->processes->head->data->fd[1]);
+    // r->processes->head->data->fd[0] = r->processes->head->data->fd[1] = -1;
+  }
 }
 
 extern void execPipeline(Pipeline pipeline, Jobs jobs, int *eof) {
