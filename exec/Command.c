@@ -57,13 +57,6 @@ BIDEFN(cd) {
     cwd = getcwd(NULL, 0); // get the current working directory
   }
   
-  //og code
-  //   if (owd) free(owd);
-  //   owd=cwd;
-  //   cwd=strdup(r->argv[1]);
-  // }
-  // if (cwd && chdir(cwd))
-  //   ERROR("chdir() failed"); // warn
 }
 
 //implement history as a builtin
@@ -164,10 +157,14 @@ extern void execCommand(Command command, Pipeline pipeline, Jobs jobs,
     *jobbed=1;
     addJobs(jobs,pipeline);
   }
+  int pipefd[2]; // file descriptors for the pipe
+  pipe(pipefd); // create a pipe
   int pid=fork();
   if (pid==-1)
     ERROR("fork() failed");
   if (pid==0) {
+      close(pipefd[0]); // close the read end of the pipe in the child
+      dup2(pipefd[1], STDOUT_FILENO); // redirect stdout to the write end of the pipe
       if (r->input_file) {
         // Redirect stdin to the specified file
         freopen(r->input_file, "r", stdin);
@@ -177,11 +174,17 @@ extern void execCommand(Command command, Pipeline pipeline, Jobs jobs,
         freopen(r->output_file, "w", stdout);
       }
     child(r,fg);
-  } 
-  else if (fg) {// if the command should be run in the foreground
-    waitpid(pid, NULL, 0); // wait for the command to finish
+  } else {
+    close(pipefd[1]); // close the write end of the pipe in the parent
+    dup2(pipefd[0], STDIN_FILENO); // redirect stdin to the read end of the pipe
+    close(pipefd[0]); // close the read end of the pipe in the parent
+    if (fg) {
+      waitpid(pid, NULL, 0); // wait for the command to finish
+    }
   }
-  // sleep(1);
+  // else if (fg) {// if the command should be run in the foreground
+  //   waitpid(pid, NULL, 0); // wait for the command to finish
+  // }
 }
 
 extern void freeCommand(Command command) {
