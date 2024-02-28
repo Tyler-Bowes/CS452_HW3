@@ -57,6 +57,8 @@ static T_command p_command() { // where Redir is called
   return command;
 }
 
+//this function is used to parse the pipeline
+//if the pipeline is not empty, it calls the function p_pipeline() recursively
 static T_pipeline p_pipeline() {
   T_command command=p_command();
   if (!command)
@@ -68,6 +70,8 @@ static T_pipeline p_pipeline() {
   return pipeline;
 }
 
+//this function is used to parse the sequence
+//it for "&" and ";" operators, if found, it sets the op field of the sequence struct to the operator
 static T_sequence p_sequence() {
   T_pipeline pipeline=p_pipeline();
   if (!pipeline)
@@ -86,6 +90,7 @@ static T_sequence p_sequence() {
   return sequence;
 }
 
+// checks for "<" and ">" operators and sets the input_file and output_file fields of the redir struct to the filename
 static T_redirIO p_redir() {
   T_redirIO redir =new_redir();
   // added "<" and ">" for I/O
@@ -93,7 +98,7 @@ static T_redirIO p_redir() {
     redir->input_file=p_word(); // parse the filename
   }else
   {
-    redir->input_file=NULL;
+    redir->input_file=NULL; // will cause segfault if not set to NULL
   }
   
   if (eat(">")) {
@@ -106,9 +111,7 @@ static T_redirIO p_redir() {
   return redir;
 }
 
-
-
-
+// parses the input string and returns the tree
 extern Tree parseTree(char *s) {
   scan=newScanner(s);
   Tree tree=p_sequence();

@@ -117,7 +117,10 @@ static char **getargs(T_words words) {
   return argv;
 }
 
-extern Command newCommand(T_words words, T_redirIO redir) {
+//creates a new CommandRep struct and allocates memory for it
+//copies the input and output file from the T_redirIO struct to the CommandRep struct
+//returns the CommandRep struct
+extern Command newCommand(T_words words, T_redirIO redir) { 
   CommandRep r=(CommandRep)malloc(sizeof(*r));
   if (!r)
     ERROR("malloc() failed");
@@ -150,6 +153,8 @@ static void child(CommandRep r, int fg) {
   exit(0);
 }
 
+//executes the command in the pipeline
+//if the command is a builtin command, it will be executed, else it will be executed in a child process
 extern void execCommand(Command command, Pipeline pipeline, Jobs jobs,
 			int *jobbed, int *eof, int fg) {
   CommandRep r=command;
@@ -188,7 +193,8 @@ extern void execCommand(Command command, Pipeline pipeline, Jobs jobs,
   }
 }
 
-extern void freeCommand(Command command) {
+//frees the memory allocated for the CommandRep struct
+extern void freeCommand(Command command) { 
   CommandRep r=command;
   char **argv=r->argv;
   while (*argv)

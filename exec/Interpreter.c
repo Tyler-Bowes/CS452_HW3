@@ -36,6 +36,7 @@ static void i_sequence(T_sequence t, Sequence sequence) {
   i_sequence(t->sequence,sequence);
 }
 
+// interprets the tree and executes the sequence
 extern void interpretTree(Tree t, int *eof, Jobs jobs) {
   if (!t)
     return;
