@@ -1,1 +1,1 @@
-cat < inp > out
+pwd
