@@ -1,0 +1,113 @@
+# Project
+* CS 452
+* HW3
+* 2/27/2024
+* Tyler Bowes
+****************
+
+# Overview
+
+This program is a implementation fo a simple Unix shell.  It supports sequences, I/O
+redirection, built-in commands, and pipelines (to an extent).  To go more in depth
+this program works as a normal but pipelines are not fully implemented.  As implementation
+went, segmentation faluts started to occure, I believe that I had the right process of
+pipelining but it was not working.  So, I commented out the code so that pipelining still
+works but does not fully.
+
+# Included Files
+
+README
+GNUmakefile
+exec (folder)
+    Test (folder) (NOTE: Each sub folder has 3 files 'exp', 'inp', and 'out'.  One example will be shown, 
+                         others will be assumed)
+        run
+        Test_cat (folder) 
+            exp
+            inp
+            out
+        Test_cd_pwd (folder)
+        Test_cp (folder)
+        Test_IO_cat (folder)
+        Test_I_cat (folder)
+        test_pwd (folder)
+        test_seq_; (folder)
+        test_seq_& (folder)
+    .history
+    Command.c
+    Command.h
+    deq.c
+    deq.h
+    GNUmakefile
+    grammer.txt
+    Interpreter.c
+    Interpreter.h
+    Jobs.c
+    Jobs.h
+    Parser.c
+    Parser.h
+    Pipeline.c
+    Pipeline.h
+    rl.supp
+    Scanner.c
+    Scanner.h
+    Sequence.c
+    Sequence.h
+    Shell.c
+    Tree.c
+    Tree.h
+    vg
+
+# Testing/Test Suit
+
+Tests were created in the Test folder.  Each subfolder inside of Test breifly describes
+what the test is.  The folders have three files inp, exp, and out.  The tests run the input
+file and return its outputs to the output file.  It will then create a diff on the expected 
+file and its output.  If there is no difference, files will do nothing.  If there is a difference,
+files will produce an error when running. 
+
+To go into the tests some more, I went into all the given examples on the homework handout and used
+those as a basline test for what it should be testing.  Other than that I added more tests that I felt
+covered as much as a could.
+
+# Compiling
+
+To compile and run the program go inside the 'exec' folder and run "make"
+in the commandline.  
+
+Once compiled, you can run "shell" to start the shell program.
+
+Otherwise, you can run "make test" to run all of the tests.
+
+# Valgrind
+
+==1598553== Memcheck, a memory error detector
+==1598553== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==1598553== Using Valgrind-3.21.0 and LibVEX; rerun with -h for copyright info
+==1598553== Command: make test
+==1598553==
+Test/run
+Test_cat
+Test_cd_pwd
+Test_cp
+Test_IO_cat
+Test_O_cat
+Test_pwd
+Test_seq_&
+Test_seq_;
+==1598553==
+==1598553== HEAP SUMMARY:
+==1598553==     in use at exit: 150,924 bytes in 1,029 blocks
+==1598553==   total heap usage: 2,326 allocs, 1,297 frees, 2,459,666 bytes allocated
+==1598553==
+==1598553== LEAK SUMMARY:
+==1598553==    definitely lost: 0 bytes in 0 blocks
+==1598553==    indirectly lost: 0 bytes in 0 blocks
+==1598553==      possibly lost: 0 bytes in 0 blocks
+==1598553==    still reachable: 150,924 bytes in 1,029 blocks
+==1598553==         suppressed: 0 bytes in 0 blocks
+==1598553== Rerun with --leak-check=full to see details of leaked memory
+==1598553==
+==1598553== For lists of detected and suppressed errors, rerun with: -s
+==1598553== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
